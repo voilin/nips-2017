@@ -125,7 +125,7 @@ It includes two concepts:
 Enable Dropout in network, which can slightly increase its score.
 
 (2) resize
-Resize to smaller and resize back before feed-forward. Then, you can tell that there are trade-off between the images features and attack signals on the resize size. Pick 200 base on experiments.
+Resize to smaller and resize back before feed-forward. Then, you can tell that there are trade-off between the images features and attack signals on the resize size. Pick 200 based on experiments.
 
 
 I suppose the resize works because it can directly average the max pooling, which can remove the attack signals.
