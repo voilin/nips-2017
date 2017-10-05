@@ -2,8 +2,11 @@
 
 This repository contains submission of three Competitions on Kaggle.
 [Non-targeted Adversarial Attack](https://www.kaggle.com/c/nips-2017-non-targeted-adversarial-attack)
+
 [Defense Against Adversarial Attack](https://www.kaggle.com/c/nips-2017-defense-against-adversarial-attack)
+
 [Targeted Adversarial Attack](https://www.kaggle.com/c/nips-2017-targeted-adversarial-attack)
+
 
 You can check reference the original toolkit. 
 [Development toolkit for participants of adversarial competition](https://github.com/tensorflow/cleverhans/tree/master/examples/nips17_adversarial_competition)
@@ -14,7 +17,6 @@ You can check reference the original toolkit.
 * Numpy
 * Pillow
 * Docker
-* [Docker](https://www.docker.com/)
 * nvidia-docker  # if gpu enable
 
 
@@ -36,7 +38,7 @@ The competition's goal is to find attack / defense on the majority of all the su
 
 ### Non-targeted Adversarial Attack
 
-#### CrossIterative_3
+### CrossIterative_3
 If condidering the majority of defense model are from "base_inception_model" and "ens_adv_inception_resnet_v2", but FGSM or BasicIterativeMethod of FGSM both have weak transferability. 
 Therefore, let's try to count gradient iteratively on both defense models. The following is one of sample scores:
 
@@ -59,14 +61,15 @@ noop,                   875
 * both is CrossIterative method
 
 
-For BasicIterativeMethod on FGSM, attack success rate rise when iter-number is higher on "the model attacked". When looking back to CrossIterative, maximum appears when iter-number = 2. Besides, I notice that every FGSM target in CrossIterative should be correct(model's top predict), because of its weak transferability.
+For BasicIterativeMethod on FGSM, attack success rate rise when iter-number is higher on "the model attacked". When looking back to CrossIterative, maximum appears when iter-number = 2. Besides, I notice that each FGSM target in CrossIterative shouldn't be affected by another (model's top predict), because of its weak transferability.
 
 I suppose before iter-number = 2 or 3, the attack target is correct just like the orignal label, but after that, the target is not correct, and it start to randomly attack the gradient signal that the other attack make, that will make the true lable appear. 
 
 Possibilities: Maybe it can reach better performance if selecting the true label as target. The label leaking might be disappear when another model attack.
 
+### Targeted Adversarial Attack
 
-#### CrossIterative_target_20
+### CrossIterative_target_20
 As mentioned, condidering the majority of defense model are from "base_inception_model" and "ens_adv_inception_resnet_v2". The following is one of sample scores:
 
 ```
@@ -82,8 +85,9 @@ iter_target_class_ens_20,836
 
 For CrossIterative, it's much simpler when target is always the same, so higher iter-number can generate feature for both attack model. So I pick iter-number = 20 to ensure it can generate 100 images in 500 sec.
 
+### Defense Against Adversarial Attack
 
-#### ens_adv_inception_resnet_v2_DropOutFocus_200
+### ens_adv_inception_resnet_v2_DropOutFocus_200
 There are common way to defense, adversarial training and distillation. Adversarial training need time and equipment. Distillation is not fit the competition's rule. 
 So, let's try to find a way to remove attack signal first before feed-forward.
 
@@ -115,12 +119,15 @@ base_inception_model,5491
 * drop means enable dropout in network
 
 It includes two concepts:
+
 (1) dropout
 Enable Dropout in network, which can slightly increase its score.
+
 (2) resize
 Resize to smaller and resize back before feed-forward. Then, you can tell that there are trade-off between the images features and attack signals on the resize size. Pick 200 base on experiments.
 
-I suppose the resize works because it can directly average the max pooling.
+
+I suppose the resize works because it can directly average the max pooling, which can remove the attack signals.
 
 Possibilities: The method to remove attack signal before network can be replace by another neural network like auto-encoder. And it should be trained on large scale attack images.
 
