@@ -1,6 +1,7 @@
 # nips-2017
 
 This repository contains submission of three Competitions on Kaggle.
+
 [Non-targeted Adversarial Attack](https://www.kaggle.com/c/nips-2017-non-targeted-adversarial-attack)
 
 [Defense Against Adversarial Attack](https://www.kaggle.com/c/nips-2017-defense-against-adversarial-attack)
